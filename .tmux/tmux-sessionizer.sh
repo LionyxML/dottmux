@@ -3,7 +3,11 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/Projects -mindepth 1 -maxdepth 4 -type d | fzf)
+    if [[ -n $TMUX ]]; then
+        selected=$(find ~/Projects -mindepth 1 -maxdepth 4 -type d | fzf --tmux center --border --color=border:blue --prompt='  Searching project: ')
+    else
+        selected=$(find ~/Projects -mindepth 1 -maxdepth 4 -type d | fzf --height=80% --border --color=border:blue --prompt='  Searching project: ')
+    fi
 fi
 
 if [[ -z $selected ]]; then
@@ -14,12 +18,14 @@ selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then 
-    tmux new-session -s $selected_name -c $selected
+    tmux new-session -s "$selected_name" -c "$selected"
     exit 0
 fi
 
-if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
+if ! tmux has-session -t="$selected_name" 2>/dev/null; then
+    tmux new-session -ds "$selected_name" -c "$selected"
 fi
 
-tmux switch-client -t $selected_name
+tmux switch-client -t "$selected_name"
+
+

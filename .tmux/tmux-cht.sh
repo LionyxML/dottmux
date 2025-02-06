@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-selected=`cat ~/.tmux/tmux-cht-languages-list ~/.tmux/tmux-cht-command-list | fzf`
+selected=$(cat ~/.tmux/tmux-cht-languages-list ~/.tmux/tmux-cht-command-list | fzf --tmux center --border --color=border:blue --prompt='  Searching cheat-sheet: ')
 if [[ -z $selected ]]; then
     exit 0
 fi
