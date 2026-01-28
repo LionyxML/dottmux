@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
+if command -v fd &>/dev/null; then
+    finder() { fd . ~/Projects --min-depth 1 --max-depth 4 --type d; }
+else
+    finder() { find ~/Projects -mindepth 1 -maxdepth 4 -type d; }
+fi
+
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
     if [[ -n $TMUX ]]; then
-        selected=$(find ~/Projects -mindepth 1 -maxdepth 4 -type d | fzf --tmux center --border --color=border:blue --prompt='  Searching project: ')
+        selected=$(finder | fzf --tmux center --border --color=border:blue --prompt='  Searching project: ')
     else
-        selected=$(find ~/Projects -mindepth 1 -maxdepth 4 -type d | fzf --height=80% --border --color=border:blue --prompt='  Searching project: ')
+        selected=$(finder | fzf --height=80% --border --color=border:blue --prompt='  Searching project: ')
     fi
 fi
 
