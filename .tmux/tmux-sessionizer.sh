@@ -10,9 +10,9 @@ if [[ $# -eq 1 ]]; then
     selected=$1
 else
     if [[ -n $TMUX ]]; then
-        selected=$(finder | fzf --tmux center --border --color=border:blue --prompt='  Searching project: ')
+        selected=$(finder | fzf --tmux center --border --color=border:blue --prompt=' Searching project: ')
     else
-        selected=$(finder | fzf --height=80% --border --color=border:blue --prompt='  Searching project: ')
+        selected=$(finder | fzf --height=80% --border --color=border:blue --prompt=' Searching project: ')
     fi
 fi
 
