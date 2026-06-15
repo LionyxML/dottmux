@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
+search_dirs=("$HOME/Projects" "$HOME/site-compiled" "$HOME/temp")
+
 if command -v fd &>/dev/null; then
-    finder() { fd . ~/Projects --min-depth 1 --max-depth 4 --type d; }
+    finder() { fd . "${search_dirs[@]}" --min-depth 1 --max-depth 4 --type d; }
 else
-    finder() { find ~/Projects -mindepth 1 -maxdepth 4 -type d; }
+    finder() { find "${search_dirs[@]}" -mindepth 1 -maxdepth 4 -type d; }
 fi
 
 if [[ $# -eq 1 ]]; then
