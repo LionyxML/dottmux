@@ -71,6 +71,7 @@ actions=""
 [ "$is_image" -eq 1 ] && actions+="Preview image (kitty icat)\n"
 [ "$is_youtube" -eq 1 ] && actions+="Play with mpv\n"
 [ -n "$thumb" ] && actions+="Preview thumbnail (kitty icat)\n"
+command -v cha >/dev/null 2>&1 && actions+="Open with chawan\n"
 actions+="Open with w3m\nOpen in default browser\nCopy to clipboard"
 
 action=$(printf '%b' "$actions" | fzf --border --prompt "Action: ")
@@ -128,6 +129,9 @@ case "$action" in
             mpv '$url'
             read -rsp 'Press RET to close...'
         "
+    ;;
+"Open with chawan")
+    kitty @ launch --type=tab --title "chawan" cha "$url"
     ;;
 "Open with w3m")
     kitty @ launch --type=tab --title "w3m" w3m "$url"
