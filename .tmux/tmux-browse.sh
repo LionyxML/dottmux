@@ -317,12 +317,12 @@ urls=$(printf '%s\n' "$content" |
 # leaving no clue why. Any key closes it.
 [ -n "$urls" ] || {
     printf 'No URLs found in this pane.\n' |
-        fzf --border --prompt "Select an URL to browse: " \
+        fzf --tmux center --border --color=border:blue --prompt "Select an URL to browse: " \
             --header 'Press ESC or RET to close' --no-preview >/dev/null
     exit 0
 }
 
-url=$(echo "$urls" | fzf --border --prompt "Select an URL to browse: " \
+url=$(echo "$urls" | fzf --tmux center --border --color=border:blue --prompt "Select an URL to browse: " \
     --preview "'$0' --preview {}" --preview-window 'right,55%,border-left')
 [ -n "$url" ] || exit 0
 
@@ -359,7 +359,7 @@ fi
 command -v cha >/dev/null 2>&1 && actions+="Open with chawan\n"
 actions+="Open with w3m\nOpen in default browser\nCopy to clipboard"
 
-action=$(printf '%b' "$actions" | fzf --border --prompt "Action: ")
+action=$(printf '%b' "$actions" | fzf --tmux center --border --color=border:blue --prompt "Action: ")
 [ -n "$action" ] || exit 0
 
 open_browser() {
