@@ -384,11 +384,17 @@ copy_clipboard() {
     fi
 }
 
+# kitty resolves executables with its own PATH, which on macOS (launched from
+# the GUI) lacks Homebrew & co: hand it an absolute path and our PATH instead.
+kitty_tab() {
+    kitty @ launch --type=tab --title "$1" --env "PATH=$PATH" "$(command -v "$2")" "${@:3}" >/dev/null
+}
+
 # Show an image in a new kitty tab, scaled to fill it. Bare `icat` draws at
 # native pixel size, which leaves a small image marooned in a corner of a big
 # tab; --place + --scale-up fits it to the window, aspect ratio preserved.
 icat_tab() {
-    kitty @ launch --type=tab --title "$1" bash -c "
+    kitty_tab "$1" bash -c "
             f=\$(mktemp)
             if curl -fsSL -A '$UA' '$2' -o \"\$f\"; then
                 cols=\$(tput cols 2>/dev/null || echo 80)
@@ -417,16 +423,16 @@ case "$action" in
         "mpv --no-video --term-osd-bar '$url'; read -rsp 'Press RET to close...'"
     ;;
 "Play with mpv")
-    kitty @ launch --type=tab --title "mpv" bash -c "
+    kitty_tab mpv bash -c "
             mpv '$url'
             read -rsp 'Press RET to close...'
         "
     ;;
 "Open with chawan")
-    kitty @ launch --type=tab --title "chawan" cha "$url"
+    kitty_tab chawan cha "$url"
     ;;
 "Open with w3m")
-    kitty @ launch --type=tab --title "w3m" w3m "$url"
+    kitty_tab w3m w3m "$url"
     ;;
 "Open in default browser")
     open_browser
